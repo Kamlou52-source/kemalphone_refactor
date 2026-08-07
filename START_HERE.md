@@ -296,5 +296,5 @@ Vous avez:
 
 ---
 
-*Créé par: GitHub Copilot (Claude Haiku 4.5)*
+*Créé par: Kamilou Issaka, guidé et corrigé par GitHub Copilot (Claude Haiku 4.5)*
 *Date: Mai 2026*

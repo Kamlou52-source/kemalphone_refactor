@@ -175,11 +175,11 @@ class InvoiceItem(db.Model):
 
 # ===== Application factory ======================================================
 def create_app():
-    # -- .env
-    env_path = find_dotenv(usecwd=True) or str(Path(__file__).with_name(".env"))
+    # -- .venv.env
+    env_path = find_dotenv(usecwd=True) or str(Path(__file__).with_name(".venv.env"))
     if env_path:
         load_dotenv(env_path, override=False)
-    print("Loaded .env from:", env_path)
+    print("Loaded .venv.env from:", env_path)
 
     app = Flask(__name__)
     app.config["SECRET_KEY"] = os.getenv("SECRET_KEY", "change-me-in-prod")
@@ -193,8 +193,8 @@ def create_app():
     # Uploads
     UPLOAD_DIR = Path(app.root_path) / "uploads"
     UPLOAD_DIR.mkdir(exist_ok=True)
-    app.config["UPLOAD_FOLDER"]        = str(UPLOAD_DIR)
-    app.config["MAX_CONTENT_LENGTH"]   = 10 * 1024 * 1024
+    app.config["UPLOAD_FOLDER"] = str(UPLOAD_DIR)
+    app.config["MAX_CONTENT_LENGTH"] = 10 * 1024 * 1024
     ALLOWED_EXTENSIONS = {"png", "jpg", "jpeg", "pdf"}
     def allowed_file(filename: str) -> bool:
         return "." in filename and filename.rsplit(".", 1)[1].lower() in ALLOWED_EXTENSIONS
@@ -271,9 +271,10 @@ def create_app():
         return wrapper
 
     def store_db(fname, modele, problem):
-        fname = User.fname
-        ui = UserInput(fname=fname.strip(), modele=modele.strip(),
-                       problem=problem.strip(), created=datetime.utcnow())
+        ui = UserInput(fname=fname.strip(), 
+                       modele=modele.strip(),
+                       problem=problem.strip(), 
+                       created=datetime.utcnow())
         db.session.add(ui); db.session.commit()
         return ui.id
 
@@ -657,7 +658,8 @@ def create_app():
         c.drawRightString(170*mm, y, "TVA:"); c.drawRightString(190*mm, y, f"{inv.vat_amount:.2f}"); y -= 6*mm
         c.setFont("Helvetica-Bold", 11)
         c.drawRightString(170*mm, y, "Total:"); c.drawRightString(190*mm, y, f"{inv.total:.2f}")
-        c.showPage(); c.save(); buf.seek(0); return buf
+        c.showPage(); c.save(); buf.seek(0); 
+        return buf
 
     @app.route("/invoice/<int:invoice_id>/pdf")
     @staff_required
